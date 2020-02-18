@@ -20,7 +20,7 @@ provider:
     restApiRootResourceId: !ImportValue KaskadiWebhooksRestAPIGatewayRootResourceId
 
 functions:
-  KaskadiWebhooksStockLambda:
+  KaskadiWebhooksStock:
     handler: kaskadi-webhooks-stock-lambda.handler
     layers:
       - !ImportValue KaskadiEsLayerArn
