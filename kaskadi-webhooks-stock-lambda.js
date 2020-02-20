@@ -35,8 +35,9 @@ function esLog(eventBody) {
   const logDocId = `${timestampHex[0]}-${timestampHex.substr(1, 5)}-${timestampHex.substr(5, 5)}`
   es.index({
     id: logDocId,
-    index: 'stock-webhook-log',
+    index: 'ysws-logs',
     body: {
+      type: 'stock',
       date: timestamp,
       ...eventBody
     }
