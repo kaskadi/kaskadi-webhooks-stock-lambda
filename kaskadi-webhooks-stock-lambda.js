@@ -36,7 +36,7 @@ module.exports.handler = async (event) => {
   return response
 }
 
-async function esLog(eventBody, type) {
+async function esLog(data, type) {
   const timestamp = Date.now()
   const timestampHex = timestamp.toString(16)
   const logDocId = `${timestampHex[0]}-${timestampHex.substr(1, 5)}-${timestampHex.substr(5, 5)}`
@@ -46,7 +46,7 @@ async function esLog(eventBody, type) {
     body: {
       type,
       date: timestamp,
-      ...eventBody
+      ...data
     }
   })
 }
