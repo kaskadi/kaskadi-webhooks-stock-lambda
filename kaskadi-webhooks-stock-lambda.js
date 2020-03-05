@@ -18,6 +18,13 @@ module.exports.handler = async (event) => {
     })
   }
   if (eventBody.token !== token) {
+    const logData = {
+      error_type: 'unauthorized',
+      origin: event.headers.origin,
+      origin_country: event.headers['CloudFront-Viewer-Country']
+    }
+    console.log(logData)
+    await esLog(logData, 'error')
     response.statusCode = 401
     response.body = JSON.stringify({
       message: 'Unauthorized.'
@@ -25,11 +32,11 @@ module.exports.handler = async (event) => {
     return response
   }
   console.log(event.body)
-  await esLog(eventBody)
+  await esLog(eventBody, 'stock')
   return response
 }
 
-async function esLog(eventBody) {
+async function esLog(eventBody, type) {
   const timestamp = Date.now()
   const timestampHex = timestamp.toString(16)
   const logDocId = `${timestampHex[0]}-${timestampHex.substr(1, 5)}-${timestampHex.substr(5, 5)}`
@@ -37,7 +44,7 @@ async function esLog(eventBody) {
     id: logDocId,
     index: 'ysws-logs',
     body: {
-      type: 'stock',
+      type,
       date: timestamp,
       ...eventBody
     }
